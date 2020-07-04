@@ -34,4 +34,6 @@
 
 - (RTCMediaStream*)streamForReactTag:(NSString*)reactTag;
 
+- (NSMutableArray*)getPeerConnections;
+
 @end

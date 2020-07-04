@@ -93,6 +93,16 @@
   return stream;
 }
 
+- (NSMutableArray*)getPeerConnections
+{
+    NSMutableArray *connIds = [[NSMutableArray alloc] init];
+    for (NSNumber *peerConnectionId in _peerConnections) {
+        [connIds addObject:peerConnectionId];
+      //RTCPeerConnection *peerConnection = _peerConnections[peerConnectionId];
+    }
+    return connIds;
+}
+
 RCT_EXPORT_MODULE();
 
 - (dispatch_queue_t)methodQueue
