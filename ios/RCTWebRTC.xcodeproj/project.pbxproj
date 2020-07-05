@@ -18,6 +18,7 @@
 		35EC07E61CB73DFE00F3D79C /* RCTConvert+WebRTC.m in Sources */ = {isa = PBXBuildFile; fileRef = 35EC07E51CB73DFE00F3D79C /* RCTConvert+WebRTC.m */; };
 		35EC083A1CB9AEE900F3D79C /* WebRTCModule+RTCDataChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 35EC08391CB9AEE900F3D79C /* WebRTCModule+RTCDataChannel.m */; };
 		FE80B82F24B1A44D003DF7B0 /* Socket in Frameworks */ = {isa = PBXBuildFile; productRef = FE80B82E24B1A44D003DF7B0 /* Socket */; };
+		FEDD704124B24C86003ED9D7 /* SockerCover.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEDD704024B24C86003ED9D7 /* SockerCover.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -52,6 +53,7 @@
 		35EC07E51CB73DFE00F3D79C /* RCTConvert+WebRTC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCTConvert+WebRTC.m"; sourceTree = "<group>"; };
 		35EC08381CB9AEC400F3D79C /* WebRTCModule+RTCDataChannel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WebRTCModule+RTCDataChannel.h"; sourceTree = "<group>"; };
 		35EC08391CB9AEE900F3D79C /* WebRTCModule+RTCDataChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WebRTCModule+RTCDataChannel.m"; sourceTree = "<group>"; };
+		FEDD704024B24C86003ED9D7 /* SockerCover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SockerCover.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 				0B56CFFF212C12EF00213CEE /* WebRTCModule+VideoTrackAdapter.m */,
 				35A222441CB493C00015FD5C /* WebRTCModule.h */,
 				35A222451CB493C00015FD5C /* WebRTCModule.m */,
+				FEDD704024B24C86003ED9D7 /* SockerCover.swift */,
 			);
 			path = RCTWebRTC;
 			sourceTree = "<group>";
@@ -141,6 +144,7 @@
 				TargetAttributes = {
 					35A2221E1CB493700015FD5C = {
 						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 1130;
 					};
 				};
 			};
@@ -171,6 +175,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				35A2226D1CB493C00015FD5C /* WebRTCModule+RTCPeerConnection.m in Sources */,
+				FEDD704124B24C86003ED9D7 /* SockerCover.swift in Sources */,
 				0B56D000212C12EF00213CEE /* WebRTCModule+VideoTrackAdapter.m in Sources */,
 				35A2226C1CB493C00015FD5C /* WebRTCModule+RTCMediaStream.m in Sources */,
 				0BDDA6E020C18B6B00B38B45 /* VideoCaptureController.m in Sources */,
@@ -276,30 +281,45 @@
 		35A222291CB493700015FD5C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/usr/local/include/**";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
 		35A2222A1CB493700015FD5C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/usr/local/include/**";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
