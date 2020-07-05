@@ -65,6 +65,7 @@ RCT_EXPORT_METHOD(getUserMedia:(NSDictionary *)constraints
   RTCAudioTrack *audioTrack = nil;
   RTCVideoTrack *videoTrack = nil;
 
+  NSLog(@"------------------in ge user media")
   if (constraints[@"audio"]) {
       audioTrack = [self createAudioTrack:constraints];
   }

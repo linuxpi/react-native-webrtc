@@ -84,6 +84,7 @@ export default function getUserMedia(constraints = {}) {
           reject(error);
       };
 
+      console.log("----------------------- calling getUserMedia")
       WebRTCModule.getUserMedia(constraints, success, failure);
     });
   });
