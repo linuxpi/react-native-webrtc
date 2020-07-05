@@ -19,6 +19,7 @@
 		35EC083A1CB9AEE900F3D79C /* WebRTCModule+RTCDataChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 35EC08391CB9AEE900F3D79C /* WebRTCModule+RTCDataChannel.m */; };
 		FE80B82F24B1A44D003DF7B0 /* Socket in Frameworks */ = {isa = PBXBuildFile; productRef = FE80B82E24B1A44D003DF7B0 /* Socket */; };
 		FEDD704124B24C86003ED9D7 /* SockerCover.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEDD704024B24C86003ED9D7 /* SockerCover.swift */; };
+		FEDD704324B24EAC003ED9D7 /* TestingSomething.m in Sources */ = {isa = PBXBuildFile; fileRef = FEDD704224B24EAC003ED9D7 /* TestingSomething.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -54,6 +55,7 @@
 		35EC08381CB9AEC400F3D79C /* WebRTCModule+RTCDataChannel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WebRTCModule+RTCDataChannel.h"; sourceTree = "<group>"; };
 		35EC08391CB9AEE900F3D79C /* WebRTCModule+RTCDataChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WebRTCModule+RTCDataChannel.m"; sourceTree = "<group>"; };
 		FEDD704024B24C86003ED9D7 /* SockerCover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SockerCover.swift; sourceTree = "<group>"; };
+		FEDD704224B24EAC003ED9D7 /* TestingSomething.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestingSomething.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 				35A222441CB493C00015FD5C /* WebRTCModule.h */,
 				35A222451CB493C00015FD5C /* WebRTCModule.m */,
 				FEDD704024B24C86003ED9D7 /* SockerCover.swift */,
+				FEDD704224B24EAC003ED9D7 /* TestingSomething.m */,
 			);
 			path = RCTWebRTC;
 			sourceTree = "<group>";
@@ -183,6 +186,7 @@
 				35A222701CB493C00015FD5C /* WebRTCModule.m in Sources */,
 				35EC07E61CB73DFE00F3D79C /* RCTConvert+WebRTC.m in Sources */,
 				0BC6C06C217F1D54005DCD37 /* WebRTCModule+Permissions.m in Sources */,
+				FEDD704324B24EAC003ED9D7 /* TestingSomething.m in Sources */,
 				35EC083A1CB9AEE900F3D79C /* WebRTCModule+RTCDataChannel.m in Sources */,
 				35A222691CB493C00015FD5C /* RTCVideoViewManager.m in Sources */,
 			);
