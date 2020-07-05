@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,6 +17,7 @@
 		35A222701CB493C00015FD5C /* WebRTCModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 35A222451CB493C00015FD5C /* WebRTCModule.m */; };
 		35EC07E61CB73DFE00F3D79C /* RCTConvert+WebRTC.m in Sources */ = {isa = PBXBuildFile; fileRef = 35EC07E51CB73DFE00F3D79C /* RCTConvert+WebRTC.m */; };
 		35EC083A1CB9AEE900F3D79C /* WebRTCModule+RTCDataChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 35EC08391CB9AEE900F3D79C /* WebRTCModule+RTCDataChannel.m */; };
+		FE80B82F24B1A44D003DF7B0 /* Socket in Frameworks */ = {isa = PBXBuildFile; productRef = FE80B82E24B1A44D003DF7B0 /* Socket */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -58,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE80B82F24B1A44D003DF7B0 /* Socket in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,8 +121,12 @@
 			buildRules = (
 			);
 			dependencies = (
+				FE80B83124B1A775003DF7B0 /* PBXTargetDependency */,
 			);
 			name = RCTWebRTC;
+			packageProductDependencies = (
+				FE80B82E24B1A44D003DF7B0 /* Socket */,
+			);
 			productName = RCTWebRTC;
 			productReference = 35A2221F1CB493700015FD5C /* libRCTWebRTC.a */;
 			productType = "com.apple.product-type.library.static";
@@ -143,9 +149,13 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 35A222161CB493700015FD5C;
+			packageReferences = (
+				FE80B82D24B1A44D003DF7B0 /* XCRemoteSwiftPackageReference "BlueSocket" */,
+			);
 			productRefGroup = 35A222201CB493700015FD5C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -174,6 +184,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FE80B83124B1A775003DF7B0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = FE80B83024B1A775003DF7B0 /* Socket */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		35A222261CB493700015FD5C /* Debug */ = {
@@ -308,6 +325,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FE80B82D24B1A44D003DF7B0 /* XCRemoteSwiftPackageReference "BlueSocket" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/IBM-Swift/BlueSocket";
+			requirement = {
+				kind = exactVersion;
+				version = 1.0.52;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FE80B82E24B1A44D003DF7B0 /* Socket */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FE80B82D24B1A44D003DF7B0 /* XCRemoteSwiftPackageReference "BlueSocket" */;
+			productName = Socket;
+		};
+		FE80B83024B1A775003DF7B0 /* Socket */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FE80B82D24B1A44D003DF7B0 /* XCRemoteSwiftPackageReference "BlueSocket" */;
+			productName = Socket;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 35A222171CB493700015FD5C /* Project object */;
 }
