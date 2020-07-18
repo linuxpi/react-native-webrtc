@@ -7,6 +7,7 @@ import RTCView from './RTCView';
 import MediaStream from './MediaStream';
 import MediaStreamTrack from './MediaStreamTrack';
 import mediaDevices from './MediaDevices';
+import getDisplayMedia from './getDisplayMedia';
 import permissions from './Permissions';
 
 export {
@@ -18,7 +19,8 @@ export {
   MediaStreamTrack,
   mediaDevices,
   permissions,
-  registerGlobals
+  registerGlobals,
+  getDisplayMedia
 };
 
 function registerGlobals() {
@@ -36,6 +38,8 @@ function registerGlobals() {
 
 	navigator.mediaDevices.enumerateDevices =
 		mediaDevices.enumerateDevices.bind(mediaDevices);
+
+	
 
 	global.RTCPeerConnection     = RTCPeerConnection;
 	global.RTCIceCandidate       = RTCIceCandidate;
