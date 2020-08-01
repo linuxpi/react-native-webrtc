@@ -375,6 +375,18 @@ RCT_EXPORT_METHOD(peerConnectionGetStats:(nonnull NSString *)trackID
   return s;
 }
 
+- (NSString *)stringForPeerConnectionState:(RTCPeerConnectionState)state {
+  switch (state) {
+    case RTCPeerConnectionStateNew: return @"new";
+    case RTCPeerConnectionStateConnecting: return @"connecting";
+    case RTCPeerConnectionStateConnected: return @"connected";
+    case RTCPeerConnectionStateDisconnected: return @"disconnected";
+    case RTCPeerConnectionStateFailed: return @"failed";
+    case RTCPeerConnectionStateClosed: return @"closed";
+  }
+  return nil;
+}
+
 - (NSString *)stringForICEConnectionState:(RTCIceConnectionState)state {
   switch (state) {
     case RTCIceConnectionStateNew: return @"new";
@@ -413,8 +425,11 @@ RCT_EXPORT_METHOD(peerConnectionGetStats:(nonnull NSString *)trackID
 #pragma mark - RTCPeerConnectionDelegate methods
 
 - (void)peerConnection:(RTCPeerConnection *)peerConnection didChangeSignalingState:(RTCSignalingState)newState {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"peerConnectionSignalingStateChanged" body:
-   @{@"id": peerConnection.reactTag, @"signalingState": [self stringForSignalingState:newState]}];
+  [self sendEventWithName:kEventPeerConnectionSignalingStateChanged
+                     body:@{
+                       @"id": peerConnection.reactTag,
+                       @"signalingState": [self stringForSignalingState:newState]
+                     }];
 }
 
 - (void)peerConnection:(RTCPeerConnection *)peerConnection didAddStream:(RTCMediaStream *)stream {
@@ -431,8 +446,13 @@ RCT_EXPORT_METHOD(peerConnectionGetStats:(nonnull NSString *)trackID
   }
 
   peerConnection.remoteStreams[streamReactTag] = stream;
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"peerConnectionAddedStream"
-                                                  body:@{@"id": peerConnection.reactTag, @"streamId": stream.streamId, @"streamReactTag": streamReactTag, @"tracks": tracks}];
+  [self sendEventWithName:kEventPeerConnectionAddedStream
+                     body:@{
+                       @"id": peerConnection.reactTag,
+                       @"streamId": stream.streamId,
+                       @"streamReactTag": streamReactTag,
+                       @"tracks": tracks
+                     }];
 }
 
 - (void)peerConnection:(RTCPeerConnection *)peerConnection didRemoveStream:(RTCMediaStream *)stream {
@@ -459,28 +479,49 @@ RCT_EXPORT_METHOD(peerConnectionGetStats:(nonnull NSString *)trackID
     [peerConnection.remoteTracks removeObjectForKey:track.trackId];
   }
   [peerConnection.remoteStreams removeObjectForKey:streamReactTag];
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"peerConnectionRemovedStream" body:
-   @{@"id": peerConnection.reactTag, @"streamId": streamReactTag}];
+  [self sendEventWithName:kEventPeerConnectionRemovedStream
+                     body:@{
+                       @"id": peerConnection.reactTag,
+                       @"streamId": streamReactTag
+                     }];
 }
 
 - (void)peerConnectionShouldNegotiate:(RTCPeerConnection *)peerConnection {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"peerConnectionOnRenegotiationNeeded" body:
-   @{@"id": peerConnection.reactTag}];
+  [self sendEventWithName:kEventPeerConnectionOnRenegotiationNeeded
+                     body:@{ @"id": peerConnection.reactTag }];
+}
+
+- (void)peerConnection:(RTCPeerConnection *)peerConnection didChangeConnectionState:(RTCPeerConnectionState)newState {
+  [self sendEventWithName:kEventPeerConnectionStateChanged
+                     body:@{@"id": peerConnection.reactTag, @"connectionState": [self stringForPeerConnectionState:newState]}];
 }
 
 - (void)peerConnection:(RTCPeerConnection *)peerConnection didChangeIceConnectionState:(RTCIceConnectionState)newState {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"peerConnectionIceConnectionChanged" body:
-   @{@"id": peerConnection.reactTag, @"iceConnectionState": [self stringForICEConnectionState:newState]}];
+  [self sendEventWithName:kEventPeerConnectionIceConnectionChanged
+                     body:@{
+                       @"id": peerConnection.reactTag,
+                       @"iceConnectionState": [self stringForICEConnectionState:newState]
+                     }];
 }
 
 - (void)peerConnection:(RTCPeerConnection *)peerConnection didChangeIceGatheringState:(RTCIceGatheringState)newState {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"peerConnectionIceGatheringChanged" body:
-   @{@"id": peerConnection.reactTag, @"iceGatheringState": [self stringForICEGatheringState:newState]}];
+  [self sendEventWithName:kEventPeerConnectionIceGatheringChanged
+                     body:@{
+                       @"id": peerConnection.reactTag,
+                       @"iceGatheringState": [self stringForICEGatheringState:newState]
+                     }];
 }
 
 - (void)peerConnection:(RTCPeerConnection *)peerConnection didGenerateIceCandidate:(RTCIceCandidate *)candidate {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"peerConnectionGotICECandidate" body:
-   @{@"id": peerConnection.reactTag, @"candidate": @{@"candidate": candidate.sdp, @"sdpMLineIndex": @(candidate.sdpMLineIndex), @"sdpMid": candidate.sdpMid}}];
+  [self sendEventWithName:kEventPeerConnectionGotICECandidate
+                     body:@{
+                       @"id": peerConnection.reactTag,
+                       @"candidate": @{
+                           @"candidate": candidate.sdp,
+                           @"sdpMLineIndex": @(candidate.sdpMLineIndex),
+                           @"sdpMid": candidate.sdpMid
+                       }
+                     }];
 }
 
 - (void)peerConnection:(RTCPeerConnection*)peerConnection didOpenDataChannel:(RTCDataChannel*)dataChannel {
@@ -501,8 +542,7 @@ RCT_EXPORT_METHOD(peerConnectionGetStats:(nonnull NSString *)trackID
   NSDictionary *body = @{@"id": peerConnection.reactTag,
                         @"dataChannel": @{@"id": dataChannelId,
                                           @"label": dataChannel.label}};
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"peerConnectionDidOpenDataChannel"
-                                                  body:body];
+  [self sendEventWithName:kEventPeerConnectionDidOpenDataChannel body:body];
 }
 
 - (void)peerConnection:(nonnull RTCPeerConnection *)peerConnection didRemoveIceCandidates:(nonnull NSArray<RTCIceCandidate *> *)candidates {
