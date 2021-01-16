@@ -5,7 +5,6 @@ import EventTarget from 'event-target-shim';
 
 import getDisplayMedia from './getDisplayMedia';
 import getUserMedia from './getUserMedia';
-import getDisplayMedia from './getDisplayMedia';
 
 const {WebRTCModule} = NativeModules;
 
