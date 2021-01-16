@@ -3,6 +3,7 @@
 import {NativeModules} from 'react-native';
 import EventTarget from 'event-target-shim';
 
+import getDisplayMedia from './getDisplayMedia';
 import getUserMedia from './getUserMedia';
 import getDisplayMedia from './getDisplayMedia';
 
@@ -31,6 +32,17 @@ class MediaDevices extends EventTarget(MEDIA_DEVICES_EVENTS) {
      */
     enumerateDevices() {
         return new Promise(resolve => WebRTCModule.enumerateDevices(resolve));
+    }
+
+    /**
+     * W3C "Screen Capture" compatible {@code getDisplayMedia} implementation.
+     * See: https://w3c.github.io/mediacapture-screen-share/
+     *
+     * @param {*} constraints
+     * @returns {Promise}
+     */
+    getDisplayMedia(constraints) {
+        return getDisplayMedia(constraints);
     }
 
     /**

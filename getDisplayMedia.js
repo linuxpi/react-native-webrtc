@@ -10,10 +10,11 @@ import * as RTCUtil from './RTCUtil';
 import MediaStream from './MediaStream';
 import MediaStreamError from './MediaStreamError';
 
-let getDisplayMedia;
 
 console.log(`running for ${Platform.OS}`);
 if (Platform.OS  === 'ios') {
+  let getDisplayMedia;
+  // remove this when react-native-webrtc implements getDisplayMedia for ios
   getDisplayMedia = function (constraints = {}) {
     if (typeof constraints !== 'object') {
       return Promise.reject(new TypeError('constraints is not a dictionary'));
@@ -60,6 +61,37 @@ if (Platform.OS  === 'ios') {
         });
     });
   }
+  export default getDisplayMedia;
+  // remove this when react-native-webrtc implements getDisplayMedia for ios
+} else {
+  const { WebRTCModule } = NativeModules;
+  export default function getDisplayMedia(constraints) {
+    if (Platform.OS !== 'android') {
+        return Promise.reject(new Error('Unsupported platform'));
+    }
+
+    if (!constraints || !constraints.video) {
+        return Promise.reject(new TypeError());
+    }
+
+    return new Promise((resolve, reject) => {
+        WebRTCModule.getDisplayMedia()
+            .then(data => {
+                const { streamId, track } = data;
+
+                const info = {
+                    streamId: streamId,
+                    streamReactTag: streamId,
+                    tracks: [track]
+                };
+
+                const stream = new MediaStream(info);
+
+                resolve(stream);
+            }, error => {
+                reject(new MediaStreamError(error));
+            });
+    });
+  }
 }
 
-export default getDisplayMedia;

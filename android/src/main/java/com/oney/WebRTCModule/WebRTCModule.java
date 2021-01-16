@@ -6,6 +6,7 @@ import android.util.SparseArray;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -34,10 +35,6 @@ public class WebRTCModule extends ReactContextBaseJavaModule {
     private final SparseArray<PeerConnectionObserver> mPeerConnectionObservers;
     final Map<String, MediaStream> localStreams;
 
-    /**
-     * The implementation of {@code getUserMedia} extracted into a separate file
-     * in order to reduce complexity and to (somewhat) separate concerns.
-     */
     private GetUserMediaImpl getUserMediaImpl;
 
     public static class Options {
@@ -191,7 +188,7 @@ public class WebRTCModule extends ReactContextBaseJavaModule {
 
     private PeerConnection.RTCConfiguration parseRTCConfiguration(ReadableMap map) {
         ReadableArray iceServersArray = null;
-        if (map != null) {
+        if (map != null && map.hasKey("iceServers")) {
             iceServersArray = map.getArray("iceServers");
         }
         List<PeerConnection.IceServer> iceServers = createIceServers(iceServersArray);
@@ -201,8 +198,7 @@ public class WebRTCModule extends ReactContextBaseJavaModule {
         }
 
         // iceTransportPolicy (public api)
-        if (map.hasKey("iceTransportPolicy")
-                && map.getType("iceTransportPolicy") == ReadableType.String) {
+        if (map.hasKey("iceTransportPolicy") && map.getType("iceTransportPolicy") == ReadableType.String) {
             final String v = map.getString("iceTransportPolicy");
             if (v != null) {
                 switch (v) {
@@ -478,6 +474,11 @@ public class WebRTCModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void getDisplayMedia(Promise promise) {
+        ThreadUtils.runOnExecutor(() -> getUserMediaImpl.getDisplayMedia(promise));
+    }
+
+    @ReactMethod
     public void getUserMedia(ReadableMap constraints,
                              Callback    successCallback,
                              Callback    errorCallback) {
@@ -557,23 +558,6 @@ public class WebRTCModule extends ReactContextBaseJavaModule {
         if (stream == null) {
             Log.d(TAG, "mediaStreamRelease() stream is null");
             return;
-        }
-
-        // Remove and dispose any tracks ourselves before calling stream.dispose().
-        // We need to remove the extra objects (TrackPrivate) we create.
-
-        List<AudioTrack> audioTracks = new ArrayList<>(stream.audioTracks);
-        for (AudioTrack track : audioTracks) {
-            track.setEnabled(false);
-            stream.removeTrack(track);
-            getUserMediaImpl.disposeTrack(track.id());
-        }
-
-        List<VideoTrack> videoTracks = new ArrayList<>(stream.videoTracks);
-        for (VideoTrack track : videoTracks) {
-            track.setEnabled(false);
-            stream.removeTrack(track);
-            getUserMediaImpl.disposeTrack(track.id());
         }
 
         localStreams.remove(id);
@@ -883,20 +867,19 @@ public class WebRTCModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void peerConnectionGetStats(String trackId, int id, Callback cb) {
+    public void peerConnectionGetStats(int peerConnectionId, Promise promise) {
         ThreadUtils.runOnExecutor(() ->
-            peerConnectionGetStatsAsync(trackId, id, cb));
+            peerConnectionGetStatsAsync(peerConnectionId, promise));
     }
 
-    private void peerConnectionGetStatsAsync(String trackId,
-                                             int id,
-                                             Callback cb) {
-        PeerConnectionObserver pco = mPeerConnectionObservers.get(id);
+    private void peerConnectionGetStatsAsync(int peerConnectionId,
+                                             Promise promise) {
+        PeerConnectionObserver pco = mPeerConnectionObservers.get(peerConnectionId);
         if (pco == null || pco.getPeerConnection() == null) {
             Log.d(TAG, "peerConnectionGetStats() peerConnection is null");
-            cb.invoke(false, "PeerConnection ID not found");
+            promise.reject(new Exception("PeerConnection ID not found"));
         } else {
-            pco.getStats(trackId, cb);
+            pco.getStats(promise);
         }
     }
 
