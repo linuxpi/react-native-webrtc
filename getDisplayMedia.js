@@ -9,11 +9,13 @@ import * as RTCUtil from './RTCUtil';
 
 import MediaStream from './MediaStream';
 import MediaStreamError from './MediaStreamError';
+const { WebRTCModule } = NativeModules;
 
+let getDisplayMedia;
 
 console.log(`running for ${Platform.OS}`);
+
 if (Platform.OS  === 'ios') {
-  let getDisplayMedia;
   // remove this when react-native-webrtc implements getDisplayMedia for ios
   getDisplayMedia = function (constraints = {}) {
     if (typeof constraints !== 'object') {
@@ -61,11 +63,9 @@ if (Platform.OS  === 'ios') {
         });
     });
   }
-  export default getDisplayMedia;
   // remove this when react-native-webrtc implements getDisplayMedia for ios
 } else {
-  const { WebRTCModule } = NativeModules;
-  export default function getDisplayMedia(constraints) {
+  getDisplayMedia = function (constraints) {
     if (Platform.OS !== 'android') {
         return Promise.reject(new Error('Unsupported platform'));
     }
@@ -95,3 +95,4 @@ if (Platform.OS  === 'ios') {
   }
 }
 
+export default getDisplayMedia;
